@@ -1,20 +1,26 @@
-{% extends 'index.html' %} 
+{% extends 'index.html' %}
 {%block title%} Single Post {% endblock%}
 {% block content %}
 <h1 style="text-align:center"> Single Post</h1>
-    <h3>{{current_user.username}}</h3>
+<h3>{{current_user.username}}</h3>
 
-    <li>{{post.title}} || {{post.body}} || {{post.users.username}} || {{post.created}} || {{post.updated}} 
-        <button type='button' onclick = "window.location.href=`{{url_for('editpost', id = post.id)}}`">Edit Post</button>
-    </li>
+<li>
+    <a href="{{ url_for('flag', id=post.id, ref=request.path) }}"><i class="fa fa-flag" aria-hidden="true">
+            {{ post.flags|length }}</i></a>
+    <p>Views {{post.views}}</p>
+    {{post.title}} || {{post.body}} || {{post.users.username}} || {{post.created}} || {{post.updated}}
+    <button type='button' onclick="window.location.href=`{{url_for('editpost', id = post.id)}}`">Edit Post</button>
+</li>
 
-    {% for comment in comments%}
-    <li> KHOA || {{comment.body}} || {{comment.users.username}} || {{comment.created}} || {{comment.updated}}
-        <button type='button' onclick = "window.location.href=`{{url_for('editcomment', pid = post.id, cid= comment.id)}}`">Edit Comment</button>
+{% for comment in comments%}
+<li> KHOA || {{comment.body}} || {{comment.users.username}} || {{comment.created}} || {{comment.updated}}
+    <button type='button'
+        onclick="window.location.href=`{{url_for('editcomment', pid = post.id, cid= comment.id)}}`">Edit
+        Comment</button>
 
-    </li>
-    {%endfor%}
-    <button type='button' onclick = "window.location.href=`{{url_for('new_comment', id = post.id)}}`">Comment</button>
+</li>
+{%endfor%}
+<button type='button' onclick="window.location.href=`{{url_for('new_comment', id = post.id)}}`">Comment</button>
 
-  
+
 {% endblock %}

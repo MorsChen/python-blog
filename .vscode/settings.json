@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "venv/bin/python3",
+    "python.pythonPath": "C:\\Users\\Quyen\\AppData\\Local\\Programs\\Python\\Python37\\python.exe",
     "html-css-class-completion.includeGlobPattern": "**/*.{css,html,django-html}"
 }

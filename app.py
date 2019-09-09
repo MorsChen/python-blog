@@ -14,9 +14,9 @@ app = Flask(__name__)
 login = LoginManager(app)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///largeblogdb.db'
 POSTGRES = {
-    'user': "mors",
-    'pw': "1234",
-    'db': "blog",
+    'user': "quyen",
+    'pw': "123",
+    'db': "Mors",
     'host': "localhost",
     'port': 5432,
 }
@@ -35,6 +35,7 @@ class Users(UserMixin, db.Model):
     password = db.Column(db.String, nullable=False)
     posts = db.relationship('Posts', backref='users', lazy='dynamic')
     comments = db.relationship('Comments', backref='users', lazy='dynamic')
+    flags = db.relationship("Flags", backref='user', lazy=True)
 
     def set_pass(self, passw):
         self.password = generate_password_hash(passw)
@@ -50,7 +51,9 @@ class Posts(db.Model):
     author = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
     updated = db.Column(db.DateTime)
+    views = db.Column(db.Integer, default=0)
     comments = db.relationship('Comments', backref='posts', lazy='dynamic')
+    flags = db.relationship("Flags", backref='post', lazy=True)
 
 
 class Comments(db.Model):
@@ -60,6 +63,12 @@ class Comments(db.Model):
     created = db.Column(db.DateTime, nullable=False)
     updated = db.Column(db.DateTime)
     post = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
+
+
+class Flags(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
 
 db.create_all()
@@ -186,16 +195,32 @@ def editpost(id):
             post.body = form.body.data
             post.uploaded = datetime.now()
             db.session.commit()
-            return redirect(url_for('single_post', id = id))
-    return render_template('editpost.html', form = form, post = post)
+            return redirect(url_for('single_post', id=id))
+    return render_template('editpost.html', form=form, post=post)
 
 
-@app.route('/singlepost/<id>', methods = ['POST', 'GET'])
-@login_required
+@app.route('/singlepost/<id>', methods=['GET'])
 def single_post(id):
-    post = Posts.query.filter_by(id = id).first()
-    comments = post.comments.all()
-    return render_template('single_post.html', post = post, comments = comments)
+    post = Posts.query.filter_by(id=id).first()
+    if post:
+        comments = post.comments.all()
+        post.views += 1
+        db.session.commit()
+        return render_template('single_post.html', post=post, comments=comments)
+    return redirect(url_for('main'))
+
+
+@app.route('/posts/<id>/flag')
+def flag(id):
+    ref = request.args.get("ref")
+    post = Posts.query.filter_by(id=id).first()
+    flag = Flags.query.filter_by(post_id=id, user_id=current_user.id).first()
+    if post and not flag:
+        new_flag = Flags(post_id=id)
+        current_user.flags.append(new_flag)
+        db.session.add(new_flag)
+        db.session.commit()
+    return redirect(ref)
 
 
 @app.route('/posts/<id>/comments', methods=['POST', 'GET'])
@@ -214,24 +239,25 @@ def new_comment(id):
             post.comments.append(c)  # post
             db.session.add(c)
             db.session.commit()
-            return redirect(url_for('single_post', id = id))
+            return redirect(url_for('single_post', id=id))
         else:
             for field_name, errors in form.errors.items():
                 flash(errors)
-            return redirect(url_for('new_comment', id = id))
+            return redirect(url_for('new_comment', id=id))
 
     return render_template('new_comment.html', form=form, post=post)
 
-@app.route('/post/<pid>/editcomment/<cid>', methods = ['POST','GET'])
+
+@app.route('/post/<pid>/editcomment/<cid>', methods=['POST', 'GET'])
 @login_required
-def editcomment(pid,cid):
+def editcomment(pid, cid):
     form = NewComment()
     post = Posts.query.filter_by(id=pid).first()
     comment = Comments.query.filter_by(id=cid, author=current_user.id).first()
-    
+
     if not comment:
         flash([['you are not allow to edit the comment']])
-        return redirect(url_for('single_post', id = pid))
+        return redirect(url_for('single_post', id=pid))
     else:
         if request.method == 'POST':
             print(comment)
@@ -239,8 +265,9 @@ def editcomment(pid,cid):
             comment.uploaded = datetime.now()
             db.session.commit()
             print(comment.body)
-            return redirect(url_for('single_post',id = pid))
-        return render_template('editcomment.html', form = form, comment = comment, post = post)
+            return redirect(url_for('single_post', id=pid))
+        return render_template('editcomment.html', form=form, comment=comment, post=post)
+
 
 @app.route('/')
 def main():
