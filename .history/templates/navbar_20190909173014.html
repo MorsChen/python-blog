@@ -1,0 +1,15 @@
+{% extends 'index.html' %}
+<nav class="NavBar">
+        <div class="nav-box-content">
+            <div class="nav-box1">
+                <a class="a-nav" href="{{url_for('main')}}">HOME</a>
+                <a class="btn" href="{{url_for('profile')}}">Profile</a>
+                <a class="btn" href="{{url_for('newpost')}}">Create Post</a>
+            </div>
+            <div class="nav-box2">
+                <input class="ip-nav" placeholder="Search" >
+                <a class="btn" href="{{url_for('login')}}">Login</a>
+                <a class="btn" href="{{url_for('register')}}">Sign Up</a>
+            </div>
+        </div>
+      </nav>

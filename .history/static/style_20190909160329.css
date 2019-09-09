@@ -1,0 +1,10 @@
+.NavBar {
+    display: flex;
+    position: sticky;
+    top: 0;
+    background-color: red;
+    font-size: 3rem;
+}
+a {
+    list-style: none;
+}

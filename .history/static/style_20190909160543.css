@@ -1,0 +1,12 @@
+.NavBar {
+    display: flex;
+    position: sticky;
+    top: 0;
+    background-color: red;
+    font-size: 3rem;
+}
+.a-nav {
+    text-decoration: none;
+    font-size: 2rem;
+
+}

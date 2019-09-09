@@ -1,0 +1,6 @@
+.NavBar {
+    display: flex;
+    position: sticky;
+    background-color: red;
+    font-size: 3rem;
+}
