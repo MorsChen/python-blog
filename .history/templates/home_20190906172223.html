@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h1 style="text-align:center"> Hello world </h1>
+
+<h3>{{current_user.username}}</h3>
+
+{% for post in posts %}
+<li> <a href="{{url_for('single_post', id = post.id)}}">{{post.title}}</a> || {{post.body}} || {{post.users.username}} || {{post.created}} || {{post.updated}} 
+    <button type='button' onclick = "window.location.href=`{{url_for('editpost', id = post.id)}}`">Edit Post</button>
+    <button type='button' onclick = "window.location.href=`{{url_for('new_comment', id = post.id)}}`">Comment</button>
+</li>
+
+{%endfor%}
+
+<button type="button" onclick="window.location.href=`{{url_for('newpost')}}`"> Create New Post</button>
+
+
+<button type="button" onclick="window.location.href=`{{url_for('login')}}`"> Login</button>
+<button type="button" onclick="window.location.href=`{{url_for('register')}}`"> Register</button>
+{% endblock %}

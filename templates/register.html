@@ -1,0 +1,14 @@
+{% extends 'index.html' %} 
+{%block title%} Register {% endblock%}
+{% block content %}
+<form method="POST">
+        <h1 style="text-align:center"> Register </h1>
+    {{form.hidden_tag()}}
+    {{form.username.label}} : {{form.username()}}
+    {{form.email.label}} : {{form.email()}}
+    {{form.password.label}} : {{form.password()}}
+    {{form.confirm.label}} : {{form.confirm()}}
+    {{form.submit}}
+
+</form>
+{% endblock %}

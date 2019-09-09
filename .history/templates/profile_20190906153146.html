@@ -1,0 +1,14 @@
+{% extends 'index.html' %} 
+{%block title%} Profile {% endblock%}
+{% block content %}
+<h1 style="text-align:center"> Profile</h1>
+    <h3>{{current_user.username}}</h3>
+    
+    <!-- <li>{{post.title}} || {{post.body}}</li> -->
+
+    <button type="button" onclick="window.location.href=`{{url_for('newpost')}}`"> Create New Post</button>
+
+    <button type="button" onclick="window.location.href=`{{url_for('logout')}}`"> Log Out</button>
+
+  
+{% endblock %}

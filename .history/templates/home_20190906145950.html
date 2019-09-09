@@ -1,0 +1,7 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h1 style="text-align:center"> Hello world </h1>
+<button type="button" onclick="window.location.href=`{{url_for('login')}}`"> LogIn</button>
+<button type="button" onclick="window.location.href=`{{url_for('register')}}`"> register</button>
+{% endblock %}

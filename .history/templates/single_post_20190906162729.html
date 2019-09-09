@@ -1,0 +1,13 @@
+{% extends 'index.html' %} 
+{%block title%} Single Post {% endblock%}
+{% block content %}
+<h1 style="text-align:center"> Single Post</h1>
+    <h3>{{current_user.username}}</h3>
+
+    <li> <a href="{{url_for('single-post', id = post.id)}}">{{post.title}}</a> || {{post.body}} || {{post.users.username}} || {{post.created}} || {{post.updated}} 
+        <button type='button' onclick = "window.location.href=`{{url_for('editpost', id = post.id)}}`">Edit Post</button>
+        
+    </li>
+
+  
+{% endblock %}

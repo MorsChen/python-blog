@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h1 style="text-align:center"> Hello world </h1>
+
+
+
+{% if not current_user.is_authenticated %}
+{% for post in posts %}
+<li> {{post.title}} || {{post.body}} || {{post.users.username}} || {{post.created}} || {{post.updated}} 
+</li>
+
+{%endfor%}
+<button type="button" onclick="window.location.href=`{{url_for('login')}}`"> Login</button>
+<button type="button" onclick="window.location.href=`{{url_for('register')}}`"> Register</button>
+{% else %}
+{% for post in posts %}
+<h3>{{current_user.username}}</h3>
+<li> <a href="{{url_for('single_post', id = post.id)}}">{{post.title}}</a> || {{post.body}} || {{post.users.username}} || {{post.created}} || {{post.updated}} 
+    <button type='button' onclick = "window.location.href=`{{url_for('editpost', id = post.id)}}`">Edit Post</button>
+    <button type='button' onclick = "window.location.href=`{{url_for('new_comment', id = post.id)}}`">Comment</button>
+</li>
+{%endfor%}
+<button type="button" onclick="window.location.href=`{{url_for('newpost')}}`"> Create New Post</button>
+<button type="button" onclick="window.location.href=`{{url_for('profile')}}`"> Profile</button>
+<button type="button" onclick="window.location.href=`{{url_for('logout')}}`"> Log Out</button>
+{% endif %}
+{% endblock %}
