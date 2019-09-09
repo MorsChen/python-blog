@@ -1,20 +1,50 @@
-{% extends 'index.html' %} 
-{%block title%} Single Post {% endblock%}
-{% block content %}
-<h1 style="text-align:center"> Single Post</h1>
-    <h3>{{current_user.username}}</h3>
-
-    <li>{{post.title}} || {{post.body}} || {{post.users.username}} || {{post.created}} || {{post.updated}} ---- Views  {{post.views}}
-        <button type='button' onclick = "window.location.href=`{{url_for('editpost', id = post.id)}}`">Edit Post</button>
-    </li>
-
-    {% for comment in comments%}
-    <li> KHOA || {{comment.body}} || {{comment.users.username}} || {{comment.created}} || {{comment.updated}}
-        <button type='button' onclick = "window.location.href=`{{url_for('editcomment', pid = post.id, cid= comment.id)}}`">Edit Comment</button>
-
-    </li>
-    {%endfor%}
-    <button type='button' onclick = "window.location.href=`{{url_for('new_comment', id = post.id)}}`">Comment</button>
-
-  
-{% endblock %}
+{% extends 'index.html' %} {%block title%} Single Post {% endblock%} {% block
+content %}
+<div class="form-base-login">
+    <h1 class="h1-title">Single Post</h1>
+    <h3>{{ current_user.username }}</h3>
+    
+    <div>
+        <div>
+        <a href="{{url_for('single_post', id = post.id)}}">{{ post.title }}</a>
+        <div>
+            {{ post.body }}<br />{{ post.users.username }}<br/>{{ post.created
+            }}<br/>{{ post.updated }}
+            ---- Views  {{post.views}}
+        </div>
+        </div>
+        <button
+        class="btn"
+        type="button"
+        onclick="window.location.href=`{{url_for('editpost', id = post.id)}}`"
+        >
+        Edit Post
+        </button>
+        <button
+        class="btn"
+        type="button"
+        onclick="window.location.href=`{{url_for('new_comment', id = post.id)}}`"
+        >
+        Comment
+        </button>
+        {% for comment in comments %}
+        <div>
+            <h1>check</h1>
+            {{ comment.body }}<br />
+            {{ comment.users.username }}<br />
+            {{ comment.created }}<br />
+            {{ comment.updated }}<br />
+            <button
+            class="btn"
+            type="button"
+            onclick="window.location.href=`{{url_for('editcomment', pid = post.id, cid= comment.id)}}`"
+            >
+            Edit Comment
+            </button>
+        </div>
+        {%endfor%}
+    </div>
+    
+        {% endblock %}
+        
+</div>
