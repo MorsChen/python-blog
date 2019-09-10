@@ -1,2 +1,4 @@
 venv/
-user-stories.md
+.vscode/
+.history/
+default.py
