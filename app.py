@@ -4,13 +4,19 @@ from flask_migrate import Migrate
 
 from flask_login import LoginManager, login_required, login_user, logout_user, UserMixin, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
-from datetime import datetime
+from datetime import datetime, date
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, ValidationError, TextField, TextAreaField, validators, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, InputRequired
 
+from flask_assets import Environment, Bundle
+
 app = Flask(__name__)
+assets = Environment(app)
+assets.url = app.static_url_path
+scss = Bundle('index.scss', filters='pyscss', output='all.css')
+assets.register('scss_all', scss)
 login = LoginManager(app)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///largeblogdb.db'
 POSTGRES = {
@@ -33,9 +39,10 @@ class Users(UserMixin, db.Model):
     username = db.Column(db.String, nullable=False, unique=True)
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
-    posts = db.relationship('Posts', backref='users', lazy='dynamic')
-    comments = db.relationship('Comments', backref='users', lazy='dynamic')
-    flags = db.relationship('Flag', backref='users',lazy='dynamic')
+    is_admin = db.Column(db.Boolean, default = False)
+    posts = db.relationship('Posts', backref='users', cascade="all, delete-orphan", lazy='dynamic')
+    comments = db.relationship('Comments', backref='users', cascade="all, delete-orphan", lazy='dynamic')
+    flags = db.relationship('Flag', backref='users', cascade="all, delete-orphan", lazy='dynamic')
 
 
     def set_pass(self, passw):
@@ -43,6 +50,9 @@ class Users(UserMixin, db.Model):
 
     def check_pass(self, passw):
         return check_password_hash(self.password, passw)
+    
+    def set_admin(self):
+        self.is_admin = True
 
 
 class Posts(db.Model):
@@ -51,10 +61,10 @@ class Posts(db.Model):
     body = db.Column(db.String, nullable=False)
     author = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     created = db.Column(db.DateTime, nullable=False)
-    updated = db.Column(db.DateTime)
-    comments = db.relationship('Comments', backref='posts', lazy='dynamic')
+    updated = db.Column(db.DateTime, nullable=False)
+    comments = db.relationship('Comments', backref='posts', cascade="all, delete-orphan", lazy='dynamic')
     views = db.Column(db.Integer, default = 0)
-    flags = db.relationship('Flag', backref='posts',lazy='dynamic')
+    flags = db.relationship('Flag', backref='posts',cascade="all, delete-orphan", lazy='dynamic')
 
 class Comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -191,7 +201,7 @@ def editpost(id):
         if request.method == 'POST':
             post.title = form.title.data
             post.body = form.body.data
-            post.uploaded = datetime.now()
+            post.updated = datetime.now().now()
             db.session.commit()
             return redirect(url_for('single_post', id = id))
     return render_template('editpost.html', form = form, post = post)
@@ -255,7 +265,7 @@ def editcomment(pid,cid):
 
 @app.route("/posts/<id>/flag", methods=['POST', 'GET'])
 def report(id):
-    post = Post.query.filter_by(id=id).first()
+    post = Posts.query.filter_by(id=id).first()
     ref = request.args.get('ref')
     if post:
         existing_flags = Flag.query.filter_by(posts_id=id, author_id=current_user.id).first()
@@ -268,7 +278,45 @@ def report(id):
         print('check flags')
         return redirect(ref)
     return redirect(url_for('post'))
+
+@app.route('/admin', methods = ['POST','GET'])
+@login_required
+def admin_ctrl():
+    if current_user.is_admin:
+        posts = Posts.query.all()
+        flag = Flag.query.all()
         
+        return render_template('admin.html', posts = posts, flag = flag)
+    else:
+        return redirect(url_for('main'))
+
+
+@app.route("/delete/<id>", methods=["GET"])
+@login_required
+def delete(id):
+    post = Posts.query.filter_by(id=id).first()
+    if current_user.is_admin or Posts.query.filter_by(id=id, author=current_user.id).first():
+        db.session.delete(post)
+        db.session.commit()
+        flash("Post successfully deleted!", 'success')
+    else:
+        flash("You are not authorized to delete this post", "danger")
+    return redirect(url_for("main"))
+
+
+@app.route("/delete-comment/<id>", methods=['POST', 'GET'])
+@login_required
+def del_comment(id):
+    comment = Comments.query.filter_by(id=id).first()
+    if current_user.is_admin or Comments.query.filter_by(id=id, author = current_user.id).first() :
+        db.session.delete(comment)
+        db.session.commit()
+        flash("Comment deleted!")
+    else:
+        flash("You are not authorized to delete this comment", "danger")
+    return redirect(url_for("single_post", id=comment.post))
+
+
 @app.route('/')
 def main():
     posts = Posts.query.all()

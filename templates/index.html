@@ -2,7 +2,11 @@
 <html id="  ">
   <head>
     {% block head %}
+    {% assets "js_all" %}
+    <script type="text/javascript" src="{{ url_for('static', filename='modal.js') }}"></script>
+    {% endassets %}
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <title>{% block title %}{% endblock %} - My Blog Webpage</title>
     {% endblock %}
   </head>
@@ -26,5 +30,7 @@
       {% include 'includes/_footer.html'%}
       {% endblock %}
     </div>
+    
+    <script type="text/javascript" id="" src="{{ url_for('static', filename='modal.js') }}"></script>
   </body>
 </html>

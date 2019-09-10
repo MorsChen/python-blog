@@ -2,7 +2,7 @@
 <nav class="NavBar">
         <div class="nav-box-content">
             <div class="nav-box1">
-                <a class="a-nav" href="{{url_for('main')}}">HOME</a>
+                <a class="a-nav" href="{{url_for('main')}}">BLOG</a>
                 {% if not current_user.is_authenticated %}
                 {% else %}
                 <a class="btn" href="{{url_for('newpost')}}">Create Post</a>

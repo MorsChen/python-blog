@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "e:\\AllThings\\MySoft\\DrawingPractice\\El-Captain-CoderSchool\\Learning\\w9-flask2\\mors-blog\\venv\\Scripts\\python.exe",
+    "python.pythonPath": "venv/bin/python",
     "html-css-class-completion.includeGlobPattern": "**/*.{css,html,django-html}"
 }
