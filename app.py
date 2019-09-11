@@ -20,9 +20,10 @@ POSTGRES = {
     'host': "localhost",
     'port': 5432,
 }
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:\
-# %(port)s/%(db)s' % POSTGRES
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:\
+%(port)s/%(db)s' % POSTGRES
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.secret_key = "Stupid Things"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -149,7 +150,7 @@ def login():
                 login_user(check)
                 return redirect(url_for('main'))
         else:
-            flash(['email address or password was wrong !!! '])
+            flash('email address or password was wrong !!! ')
             return redirect(url_for('login'))
     return render_template('login.html', form=form)
 
@@ -186,11 +187,12 @@ def newpost():
 @app.route('/editpost/<id>', methods=['POST', 'GET'])
 @login_required
 def editpost(id):
+    ref = request.args.get('ref')
     form = NewPost()
     post = Posts.query.filter_by(id=id, author=current_user.id).first()
     if not post:
-        flash([['you are not allow to edit the post']])
-        return redirect(url_for('main'))
+        flash('you are not allow to edit the post')
+        return redirect(url_for('single_post', id = id))
     else:
         if request.method == 'POST':
             post.title = form.title.data
@@ -245,7 +247,7 @@ def editcomment(pid,cid):
     comment = Comments.query.filter_by(id=cid, author=current_user.id).first()
     
     if not comment:
-        flash([['you are not allow to edit the comment']])
+        flash('you are not allow to edit the comment')
         return redirect(url_for('single_post', id = pid))
     else:
         if request.method == 'POST':
@@ -267,11 +269,11 @@ def report(id):
             flag = Flag(posts_id=id)
             current_user.flags.append(flag)
             db.session.add(flag)
-            db.session.commit()
-            return redirect(ref)
-        print('check flags')
-        return redirect(ref)
-    return redirect(url_for('post'))
+        else:
+            db.session.delete(existing_flags)
+        db.session.commit()
+    return redirect(ref)
+    # return redirect(url_for('post'))
 
 @app.route('/admin', methods = ['POST','GET'])
 @login_required
@@ -279,7 +281,6 @@ def admin_ctrl():
     if current_user.is_admin:
         posts = Posts.query.all()
         flag = Flag.query.all()
-        
         return render_template('admin.html', posts = posts, flag = flag)
     else:
         return redirect(url_for('main'))

@@ -2,31 +2,37 @@
 content %}
 <div class="form-base-login">
     <h1 class="h1-title">Single Post</h1>
-    <h3>{{ current_user.username }}</h3>
-    
-    <div>
-        <div>
-        <a href="{{url_for('single_post', id = post.id)}}">{{ post.title }}</a>
-        <div>
-            {{ post.body }}<br />{{ post.users.username }}<br/>{{ post.created
-            }}<br/>{{ post.updated }}
-            ---- Views  {{post.views}}
+    <div class="list-content">
+            <div class="blog-title">
+                    <p class="a-title" onclick = "window.location.href=`{{url_for('single_post', id = post.id)}}`">{{post.title}}</p> 
+                    <div class="title-ctrl-ribbon">
+                            <i class="fa fa-edit purple ml-3" aria-hidden="true"
+                            onclick = "window.location.href=`{{url_for('editpost', id = post.id)}}`"></i>
+                            <i class="fa fa-trash purple ml-3" aria-hidden="true"
+                            onclick = "window.location.href=`{{url_for('delete', id = post.id)}}`"></i>
+                    </div>
+            </div>
+            <div class="body-basic">
+                    <div class="body-content">
+                            <div class="main-body">{{post.body}}</div>
+                            <div>
+                                <p class="p-details">Author: {{post.users.username}}</p>
+                                <p class="p-details">Created_at: {{post.created.strftime("%d/%m/%y")}}</p>
+                                <p class="p-details">Updated_at: {{post.updated}}</p>
+                            </div>
+                    </div>  
+                    <div>
+                                <i class="fa fa-comment-o ml-3" aria-hidden="true"
+                                onclick = "window.location.href=`{{url_for('new_comment', id = post.id)}}`"> {{ post.comments.count() }} </i>
+                                <i class="fa fa-eye ml-5" aria-hidden="true"> {{post.views}}</i>
+                                <a href="{{ url_for('report', id=post.id, ref=request.path) }}"></a>
+                                 <i class="fa fa-flag ml-5 {{'' if post['is_flagged'] else '-o'}}" aria-hidden="true"
+                                 onclick = "window.location.href=`{{url_for('report', id = post.id, ref=request.path)}}`">
+                                    {{ post.flags.count() }}</i></a>
+                               
+                    </div>
+                </div>
         </div>
-        </div>
-        <button
-        class="btn"
-        type="button"
-        onclick="window.location.href=`{{url_for('editpost', id = post.id)}}`"
-        >
-        Edit Post
-        </button>
-        <button
-        class="btn"
-        type="button"
-        onclick="window.location.href=`{{url_for('new_comment', id = post.id)}}`"
-        >
-        Comment
-        </button>
         {% for comment in comments %}
         <div>
             <h1>check</h1>

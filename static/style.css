@@ -10,26 +10,66 @@ body{
     font-family: "Livvic", sans-serif;
   }
 
+  /* Flash class and keyframe animation */
+.flashit{
+    color:rgb(255, 0, 0);
+    animation: flash linear 2.5s infinite;
+
+  }
+  @keyframes flash {
+    0% { opacity: 1; }
+    25% { opacity: 0.5; }
+    50% { opacity: .1; } 
+    75% { opacity: 1.5; }
+    100% { opacity: 1; }
+  }
+
+#flash-alert { 
+    display: flex;
+    margin: auto;
+    width: 40rem;
+    text-align: center;
+    justify-self: center;
+    animation: slidein linear 5s infinite alternate;
+}
+@keyframes slidein {
+    from {
+      transform: translateX(-25%);
+    }
+    to {
+      transform: translateX(25%);
+    }
+    
+  }
+
 .NavBar {
  /* background-color: rgb(255, 208, 0); */
+ height: 5rem;
  mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #ffc3c3 25%, #ffb8b8 75%, rgba(255, 255, 255, 0) 100%);
 }
 
 .nav-box-content{
     display: flex;
     position: sticky;
-    /* margin: 0.5rem; */
+    flex-direction: row;
     justify-content: space-between;
     top: 0;
+    width: 100%;
     padding: 0 1rem 0 1rem;
     text-align: center;
     align-items: center;
     align-content: center;
     background-color: rgba(70, 128, 136, 0.514);
-    /* opacity: 0.5; */
     font-size: 3rem;
     background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 25%, rgba(255, 255, 255, 0.2) 75%, rgba(255, 255, 255, 0) 100%);
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+.flash-box {
+    display: flex;
+    border-block-width: 40rem;
+    width: 40rem;
+    height: 4rem;
 }
 
 .nav-box1 {
@@ -163,23 +203,28 @@ a{
 
 .list-content{
     display: flex;
-    background-color: rgb(181, 255, 220);
+    background-color: rgba(181, 255, 220, 0.363);
     width: 50vw;
     margin: 1rem;
     flex-direction: column;
     border-top-left-radius: 2rem;
     border-top-right-radius: 2rem;
+    background: linear-gradient(90deg,rgba(255, 255, 255, 0.219) 0%, rgba(255, 255, 255, 0.397) 25%, rgba(255, 255, 255, 0.417) 75%, rgba(255, 255, 255, 0.233) 100%);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.322), inset 0 0 2px rgba(255, 255, 255, 0.781);
+
 }
 
 .blog-title{
     display: flex;
-    background-color: #ffa653;
+    background-color: #ff5e00;
     text-align: left;
     align-items: center;
     font-size: 1.5rem;
     height: 3rem;
     border-top-left-radius: 2rem;
     justify-content: space-between;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.322), inset 0 0 2px rgba(255, 255, 255, 0.781);
+
 }
 
 .a-title{
@@ -212,20 +257,40 @@ a{
 }
 
 .body-content {
-    width: 90%;
+    width: 100%;
     height: 20rem;
     padding: 1rem;
     border-bottom-left-radius: 2rem;
     border-bottom-right-radius: 2rem;
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
-    background-color: rgb(255, 224, 203);
+    /* background-color: rgb(255, 224, 203); */
     justify-content: space-between;
+}
+
+.p-details {
+    color: #ff5e00;
+    font-size: 1rem;
+    margin: 0.2rem;
 }
 
 .main-body {
     width: 100%;
     height: 80%;
-    background-color: red;
-    
+    background-color: rgba(255, 215, 215, 0.301) ; 
+}
+
+.bottom-body-details{
+    display: flex;
+    flex-direction: row;
+    padding: 0.5rem;
+    justify-content: space-between;
+}
+
+.main-body:hover {
+    background-color: rgb(255, 152, 104) ;
+    background: linear-gradient(90deg,rgba(255, 152, 104, 0.295) 0%, rgba(255, 152, 104, 0.63) 25%, rgba(255, 152, 104, 0.664) 75%, rgba(255, 152, 104, 0.404) 100%);
+  
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.322), inset 0 0 2px rgba(255, 255, 255, 0.781); 
+    transform: scale(1.02)
 }
