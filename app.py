@@ -21,19 +21,11 @@ POSTGRES = {
     'port': 5432,
 }
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:\
-<<<<<<< HEAD
-# 	 %(port)s/%(db)s' % POSTGRES
-
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-=======
-# %(port)s/%(db)s' % POSTGRES
->>>>>>> 0f7171b4c176784746132cea2298440508bca7eb
 app.secret_key = "Stupid Things"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 class Users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
