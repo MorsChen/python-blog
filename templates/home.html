@@ -3,6 +3,7 @@
 {% block content %}
 <div class="basic-content">
         <h1 class="h1-title"> Hello world </h1>
+
         {% if not current_user.is_authenticated %}
         <div class="form-base-login">
             {% for post in posts %}

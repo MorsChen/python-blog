@@ -20,7 +20,7 @@ assets.register('scss_all', scss)
 login = LoginManager(app)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///largeblogdb.db'
 POSTGRES = {
-    'user': "mors",
+    'user': "mors", 
     'pw': "1234",
     'db': "blog",
     'host': "localhost",
