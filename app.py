@@ -11,28 +11,24 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, ValidationError, TextField, TextAreaField, validators, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, InputRequired
 
-from flask_assets import Environment, Bundle
-
 app = Flask(__name__)
-assets = Environment(app)
-assets.url = app.static_url_path
-scss = Bundle('index.scss', filters='pyscss', output='all.css')
-assets.register('scss_all', scss)
 login = LoginManager(app)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///largeblogdb.db'
-# POSTGRES = {
-#     'user': "mors", 
-#     'pw': "1234",
-#     'db': "blog",
-#     'host': "localhost",
-#     'port': 5432,
-# }
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+POSTGRES = {
+    'user': "mors", 
+    'pw': "1234",
+    'db': "blog",
+    'host': "localhost",
+    'port': 5432,
+}
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:\
+# %(port)s/%(db)s' % POSTGRES
 app.secret_key = "Stupid Things"
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 class Users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
