@@ -1,35 +1,61 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<h1 style="text-align:center"> Hello world </h1>
+<div class="basic-content">
+        <h1 class="h1-title"> Hello world </h1>
 
-{% if not current_user.is_authenticated %}
-<div class="form-base-login">
-    {% for post in posts %}
-    <div>
-        <div><a href="{{url_for('single_post', id = post.id)}}">{{post.title}}</a> 
-        <div>{{post.body}}<br/>{{post.users.username}}<br/>{{post.created}}<br/>{{post.updated}} ---- Views  {{post.views}}</div>
+        {% if not current_user.is_authenticated %}
+        <div class="form-base-login">
+            {% for post in posts %}
+            <div>
+                <div><a href="{{url_for('single_post', id = post.id)}}">{{post.title}}</a> 
+                <div>{{post.body}}<br/>{{post.users.username}}<br/>{{post.created.strftime("%d/%m/%y")}}<br/>{{post.updated}} ---- Views  {{post.views}}</div>
+                </div>
+            </div>
+            
+            {%endfor%}
         </div>
+        {% else %}
+        <div class="form-base-login">
+                <h1 class="h1-title">{{current_user.username}}</h1>
+            <div class="wrapped">
+                    {% for post in posts %}
+                    <div class="list-content">
+                        <div class="blog-title">
+                                <p class="a-title" onclick = "window.location.href=`{{url_for('single_post', id = post.id)}}`">{{post.title}}</p> 
+                                <div class="title-ctrl-ribbon">
+                                        <i class="fa fa-edit purple ml-3" aria-hidden="true"
+                                        onclick = "window.location.href=`{{url_for('editpost', id = post.id)}}`"></i>
+                                        <i class="fa fa-trash purple ml-3" aria-hidden="true"
+                                        onclick = "window.location.href=`{{url_for('delete', id = post.id)}}`"></i>
+                                </div>
+                        </div>
+                        <div class="body-basic">
+                            <div class="body-content">
+                                    <div class="main-body">{{post.body}}</div>
+                                    <div>
+                                            {{post.users.username}}<br/>
+                                            {{post.created.strftime("%d/%m/%y")}}<br/>
+                                            {{post.updated}}<br/>
+                                    </div>
+                            </div>
+                            
+                            <i class="fa fa-comment-o purple ml-3" aria-hidden="true"
+                            id="one" class="button"
+                            onclick = "window.location.href=`{{url_for('new_comment', id = post.id)}}`"> {{ post.comments.count() }} </i>
+                            <i class="fa fa-eye ml-3 text-muted" aria-hidden="true"> {{post.views}}</i>
+                            <a href="{{ url_for('report', id=post.id, ref=request.path) }}"></a>
+                             <i class="fa fa-flag{{'' if post['is_flagged'] else '-o'}}" aria-hidden="true"
+                             onclick = "window.location.href=`{{url_for('report', id = post.id, ref=request.path)}}`">
+                                {{ post.flags.count() }}</i></a>
+                           
+                        </div>
+                    </div>
+                    {%endfor%}
+            </div>
+        
+        </div>
+        {% endif %}
+        
     </div>
-    
-    {%endfor%}
-</div>
-{% else %}
-<div class="form-base-login">
-    <h3>{{current_user.username}}</h3>
-{% for post in posts %}
-<div>
-    <div ><a href="{{url_for('single_post', id = post.id)}}">{{post.title}}</a> 
-    <div>{{post.body}}<br/>{{post.users.username}}<br/>{{post.created}}<br/>{{post.updated}}
-         <br/>---- Views  {{post.views}}</div>
-    </div>
-    <button class="btn" type='button' onclick = "window.location.href=`{{url_for('editpost', id = post.id)}}`">Edit Post</button>
-    <button class="btn" type='button' onclick = "window.location.href=`{{url_for('new_comment', id = post.id)}}`">Comment</button>
-</div>
-{%endfor%}
-
-</div>
-{% endif %}
-
-{% endblock %}
-
+        {% endblock %}     

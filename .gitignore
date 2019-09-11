@@ -1,0 +1,5 @@
+venv/
+.vscode/
+.history/
+default.py
+__pycache__
