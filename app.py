@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+import os
 
 from flask_login import LoginManager, login_required, login_user, logout_user, UserMixin, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -26,8 +27,7 @@ POSTGRES = {
     'host': "localhost",
     'port': 5432,
 }
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:\
-	 %(port)s/%(db)s' % POSTGRES
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.secret_key = "Stupid Things"
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 db = SQLAlchemy(app)
