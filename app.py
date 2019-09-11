@@ -20,13 +20,13 @@ scss = Bundle('index.scss', filters='pyscss', output='all.css')
 assets.register('scss_all', scss)
 login = LoginManager(app)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///largeblogdb.db'
-POSTGRES = {
-    'user': "mors", 
-    'pw': "1234",
-    'db': "blog",
-    'host': "localhost",
-    'port': 5432,
-}
+# POSTGRES = {
+#     'user': "mors", 
+#     'pw': "1234",
+#     'db': "blog",
+#     'host': "localhost",
+#     'port': 5432,
+# }
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.secret_key = "Stupid Things"
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
