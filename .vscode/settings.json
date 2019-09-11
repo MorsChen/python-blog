@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "/Library/Frameworks/Python.framework/Versions/3.7/bin/python3",
+    "python.pythonPath": "/Users/MorsChen/Desktop/HTML-5-CSS/w8-flask/large-post/venv/bin/python3",
     "html-css-class-completion.includeGlobPattern": "**/*.{css,html,django-html}"
 }
