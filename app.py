@@ -319,9 +319,7 @@ def del_comment(id):
 
 @app.route('/')
 def main():
-    posts = Posts.query.all()
-    comments = Comments.query.all()
-    return render_template('home.html', posts=posts, comments=comments)
+    return 'hello world.'
 
 
 if __name__ == "__main__":
