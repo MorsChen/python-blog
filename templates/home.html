@@ -15,21 +15,22 @@
                                 <div class="body-content">
                                         <div class="main-body">{{post.body}}</div>
                                         <div>
-                                                {{post.users.username}}<br/>
-                                                {{post.created.strftime("%d/%m/%y")}}<br/>
-                                                {{post.updated}}<br/>
+                                                <p class="p-details">Author: {{post.users.username}}</p>
+                                                <p class="p-details">Created_at: {{post.created.strftime("%d/%m/%y")}}</p>
+                                                <p class="p-details">Updated_at: {{post.updated}}</p>
                                         </div>
+                                </div>  
+                                <div>
+                                                <i class="fa fa-comment-o ml-3" aria-hidden="true"
+                                                onclick = "window.location.href=`{{url_for('new_comment', id = post.id)}}`"> {{ post.comments.count() }} </i>
+                                                <i class="fa fa-eye ml-5" aria-hidden="true"> {{post.views}}</i>
+                                                <a href="{{ url_for('report', id=post.id, ref=request.path) }}"></a>
+                                                <i class="fa fa-flag ml-5 {{'' if post['is_flagged'] else '-o'}}" aria-hidden="true"
+                                                onclick = "window.location.href=`{{url_for('report', id = post.id, ref=request.path)}}`">
+                                                {{ post.flags.count() }}</i></a>
+                                                
                                 </div>
-                                
-                                <i class="fa fa-comment-o purple ml-3" aria-hidden="true"
-                                > {{ post.comments.count() }} </i>
-                                <i class="fa fa-eye ml-3 text-muted" aria-hidden="true"> {{post.views}}</i>
-                                <a href="{{ url_for('report', id=post.id, ref=request.path) }}"></a>
-                                 <i class="fa fa-flag{{'' if post else '-o'}}" aria-hidden="true"
-                                 onclick = "window.location.href=`{{url_for('report', id = post.id, ref=request.path)}}`">
-                                    {{ post.flags.count() }}</i></a>
-                               
-                            </div>
+                                </div>
                         </div>
                         
                         {%endfor%}
