@@ -23,6 +23,7 @@ POSTGRES = {
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:\
 # %(port)s/%(db)s' % POSTGRES
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.secret_key = "Stupid Things"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
