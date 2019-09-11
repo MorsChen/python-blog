@@ -20,10 +20,10 @@ POSTGRES = {
     'host': "localhost",
     'port': 5432,
 }
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:\
-%(port)s/%(db)s' % POSTGRES
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:%(pw)s@%(host)s:\
+# %(port)s/%(db)s' % POSTGRES
+# app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.secret_key = "Stupid Things"
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
