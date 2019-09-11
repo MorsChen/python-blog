@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h1 style="text-align:center"> Hello world </h1>
+
+{% if not current_user.is_authenticated %}
+<div class="form-base-login">
+    {% for post in posts %}
+    <div>
+        <div><a href="{{url_for('single_post', id = post.id)}}">{{post.title}}</a> 
+        <div>{{post.body}}<br/>{{post.users.username}}<br/>{{post.created.strftime("%d/%m/%y")}}<br/>{{post.updated}} ---- Views  {{post.views}}</div>
+        </div>
+    </div>
+    
+    {%endfor%}
+</div>
+{% else %}
+<div class="form-base-login">
+    <h3 class="a-title">{{current_user.username}}</h3>
+    <div class="wrapped">
+            {% for post in posts %}
+            <div class="list-content">
+                <div class="blog-title">
+                        <p class="a-title" onclick = "window.location.href=`{{url_for('single_post', id = post.id)}}`">{{post.title}}</p> 
+                        <div class="title-ctrl-ribbon">
+                                <i class="fa fa-edit purple ml-3" aria-hidden="true"
+                                onclick = "window.location.href=`{{url_for('editpost', id = post.id)}}`"></i>
+                                <i class="fa fa-trash purple ml-3" aria-hidden="true"
+                                onclick = "window.location.href=`{{url_for('delete', id = post.id)}}`"></i>
+                        </div>
+                </div>
+                <div class="body-basic">
+                    {{post.body}}<br/>{{post.users.username}}<br/>{{post.created.strftime("%d/%m/%y")}}<br/>{{post.updated}}<br/>
+                    <i class="fa fa-comment-o purple ml-3" aria-hidden="true"
+                    onclick = "window.location.href=`{{url_for('new_comment', id = post.id)}}`"> {{ post.comments.count() }} </i>
+                    <i class="fa fa-eye ml-3 text-muted" aria-hidden="true"> {{post.views}}</i>
+                    <a href="{{ url_for('report', id=post.id, ref=request.path) }}"></a>
+                     <i class="fa fa-flag{{'' if post['is_flagged'] else '-o'}}" aria-hidden="true"
+                     onclick = "window.location.href=`{{url_for('report', id = post.id, ref=request.path)}}`">
+                        {{ post.flags.count() }}</i></a>
+                   
+                </div>
+            </div>
+            {%endfor%}
+    </div>
+
+</div>
+{% endif %}
+
+{% endblock %}
+

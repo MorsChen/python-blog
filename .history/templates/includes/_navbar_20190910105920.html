@@ -1,0 +1,23 @@
+
+<nav class="NavBar">
+        <div class="nav-box-content">
+            <div class="nav-box1">
+                <a class="a-nav" href="{{url_for('main')}}">HOME</a>
+                {% if not current_user.is_authenticated %}
+                {% else %}
+                <a class="btn" href="{{url_for('newpost')}}">Create Post</a>
+                {% endif %}
+                
+            </div>
+            <div class="nav-box2">
+                <input class="ip-nav" placeholder="Search" >
+                {% if not current_user.is_authenticated %}
+                <a class="btn" href="{{url_for('login')}}">Login</a>
+                <a class="btn" href="{{url_for('register')}}">Sign Up</a>
+                {% else %}
+                <a class="btn" href="{{url_for('profile')}}">Profile</a>
+                <a class="btn" href="{{url_for('logout')}}">Log Out</a>
+                {% endif %}
+            </div>
+        </div>
+      </nav>

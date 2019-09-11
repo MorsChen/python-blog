@@ -1,0 +1,75 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<div id="modal-container">
+        <div class="modal-background">
+          <div class="modal">
+            <h2>I'm a Modal</h2>
+            <p>Hear me roar.</p>
+            <svg class="modal-svg" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none">
+                                      <rect x="0" y="0" fill="none" width="226" height="162" rx="3" ry="3"></rect>
+                                  </svg>
+          </div>
+        </div>
+      </div>
+
+<div class="basic-content">
+        <h1 class="h1-title"> Hello world </h1>
+        {% if not current_user.is_authenticated %}
+        <div class="form-base-login">
+            {% for post in posts %}
+            <div>
+                <div><a href="{{url_for('single_post', id = post.id)}}">{{post.title}}</a> 
+                <div>{{post.body}}<br/>{{post.users.username}}<br/>{{post.created.strftime("%d/%m/%y")}}<br/>{{post.updated}} ---- Views  {{post.views}}</div>
+                </div>
+            </div>
+            
+            {%endfor%}
+        </div>
+        {% else %}
+        <div class="form-base-login">
+                <h1 class="h1-title">{{current_user.username}}</h1>
+            <div class="wrapped">
+                    {% for post in posts %}
+                    <div class="list-content">
+                        <div class="blog-title">
+                                <p class="a-title" onclick = "window.location.href=`{{url_for('single_post', id = post.id)}}`">{{post.title}}</p> 
+                                <div class="title-ctrl-ribbon">
+                                        <i class="fa fa-edit purple ml-3" aria-hidden="true"
+                                        onclick = "window.location.href=`{{url_for('editpost', id = post.id)}}`"></i>
+                                        <i class="fa fa-trash purple ml-3" aria-hidden="true"
+                                        onclick = "window.location.href=`{{url_for('delete', id = post.id)}}`"></i>
+                                </div>
+                        </div>
+                        <div class="body-basic">
+                            <div class="body-content">
+                                    <div class="main-body">{{post.body}}</div>
+                                    <div>
+                                            {{post.users.username}}<br/>
+                                            {{post.created.strftime("%d/%m/%y")}}<br/>
+                                            {{post.updated}}<br/>
+                                    </div>
+                            </div>
+                            
+                            <i class="fa fa-comment-o purple ml-3" aria-hidden="true"
+                            id="one" class="button"
+                            onclick = "window.location.href=`{{url_for('new_comment', id = post.id)}}`"> {{ post.comments.count() }} </i>
+                            <i class="fa fa-eye ml-3 text-muted" aria-hidden="true"> {{post.views}}</i>
+                            <a href="{{ url_for('report', id=post.id, ref=request.path) }}"></a>
+                             <i class="fa fa-flag{{'' if post['is_flagged'] else '-o'}}" aria-hidden="true"
+                             onclick = "window.location.href=`{{url_for('report', id = post.id, ref=request.path)}}`">
+                                {{ post.flags.count() }}</i></a>
+                           
+                        </div>
+                    </div>
+                    {%endfor%}
+            </div>
+        
+        </div>
+        {% endif %}
+        
+        {% endblock %}
+        
+        
+</div>

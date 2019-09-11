@@ -1,0 +1,37 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<h1 style="text-align:center"> Hello world </h1>
+
+{% if not current_user.is_authenticated %}
+<div class="form-base-login">
+    {% for post in posts %}
+    <div>
+        <div><a href="{{url_for('single_post', id = post.id)}}">{{post.title}}</a> 
+        <div>{{post.body}}<br/>{{post.users.username}}<br/>{{post.created}}<br/>{{post.updated}} ---- Views  {{post.views}}</div>
+        </div>
+    </div>
+    
+    {%endfor%}
+</div>
+{% else %}
+<div class="form-base-login">
+    <h3>{{current_user.username}}</h3>
+{% for post in posts %}
+<div>
+    <div ><a href="{{url_for('single_post', id = post.id)}}">{{post.title}}</a> 
+    <div>{{post.body}}<br/>{{post.users.username}}<br/>{{post.created}}<br/>{{post.updated}}
+         <br/>---- Views  {{post.views}}</div>
+         <br/>---- <a href="{{url_for('report', id = post.id, ref = request.path) }}">Reports</a> {{post.flags.count()}}
+    </div>
+    <button class="btn" type='button' onclick = "window.location.href=`{{url_for('editpost', id = post.id)}}`">Edit Post</button>
+    <button class="btn" type='button' onclick = "window.location.href=`{{url_for('delete', id = post.id)}}`">Del Post</button>
+    <button class="btn" type='button' onclick = "window.location.href=`{{url_for('new_comment', id = post.id)}}`">Comment</button>
+</div>
+{%endfor%}
+
+</div>
+{% endif %}
+
+{% endblock %}
+
